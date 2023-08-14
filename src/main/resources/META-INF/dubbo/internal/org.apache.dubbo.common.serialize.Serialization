@@ -1,0 +1,2 @@
+fury=org.furyio.serialization.dubbo.FurySerialization
+fury-compatible=org.furyio.serialization.dubbo.FuryCompatibleSerialization
