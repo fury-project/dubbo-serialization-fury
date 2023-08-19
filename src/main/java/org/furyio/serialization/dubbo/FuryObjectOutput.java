@@ -21,7 +21,7 @@ public class FuryObjectOutput implements ObjectOutput {
     this.fury = fury;
     this.buffer = buffer;
     this.output = output;
-    if (buffer.writerIndex() == 0) {
+    if (buffer.writerIndex() != 0) {
       throw new IllegalArgumentException("Index should be 0 instead of " + buffer.writerIndex());
     }
     buffer.writeInt(-1);
