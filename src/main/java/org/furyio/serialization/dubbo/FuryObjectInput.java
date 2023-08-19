@@ -2,10 +2,8 @@ package org.furyio.serialization.dubbo;
 
 import io.fury.Fury;
 import io.fury.memory.MemoryBuffer;
-import org.apache.dubbo.common.serialize.ObjectInput;
-
-import java.io.IOException;
 import java.lang.reflect.Type;
+import org.apache.dubbo.common.serialize.ObjectInput;
 
 @SuppressWarnings("unchecked")
 public class FuryObjectInput implements ObjectInput {
@@ -17,64 +15,71 @@ public class FuryObjectInput implements ObjectInput {
     this.buffer = buffer;
   }
 
-
   @Override
-  public Object readObject() throws IOException, ClassNotFoundException {
-    return fury.readNonRef(buffer);
+  public Object readObject() {
+    return fury.deserializeJavaObjectAndClass(buffer);
   }
 
   @Override
-  public <T> T readObject(Class<T> cls) throws IOException, ClassNotFoundException {
-    return (T) fury.readNonRef(buffer);
+  public <T> T readObject(Class<T> cls) {
+    return (T) readObject();
   }
 
   @Override
-  public <T> T readObject(Class<T> cls, Type type) throws IOException, ClassNotFoundException {
-    return (T) fury.readNonRef(buffer);
+  public <T> T readObject(Class<T> cls, Type type) {
+    return (T) readObject();
   }
 
   @Override
-  public boolean readBool() throws IOException {
+  public boolean readBool() {
     return buffer.readBoolean();
   }
 
   @Override
-  public byte readByte() throws IOException {
+  public byte readByte() {
     return buffer.readByte();
   }
 
   @Override
-  public short readShort() throws IOException {
+  public short readShort() {
     return buffer.readShort();
   }
 
   @Override
-  public int readInt() throws IOException {
-    return buffer.readInt();
+  public int readInt() {
+    return buffer.readVarInt();
   }
 
   @Override
-  public long readLong() throws IOException {
+  public long readLong() {
     return buffer.readLong();
   }
 
   @Override
-  public float readFloat() throws IOException {
+  public float readFloat() {
     return buffer.readFloat();
   }
 
   @Override
-  public double readDouble() throws IOException {
+  public double readDouble() {
     return buffer.readDouble();
   }
 
   @Override
-  public String readUTF() throws IOException {
-    return fury.readJavaString(buffer);
+  public String readUTF() {
+    if (buffer.readBoolean()) {
+      return fury.readJavaString(buffer);
+    } else {
+      return null;
+    }
   }
 
   @Override
-  public byte[] readBytes() throws IOException {
-    return buffer.readBytesWithSizeEmbedded();
+  public byte[] readBytes() {
+    if (buffer.readBoolean()) {
+      return buffer.readBytesWithSizeEmbedded();
+    } else {
+      return null;
+    }
   }
 }

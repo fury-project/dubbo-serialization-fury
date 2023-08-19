@@ -13,13 +13,13 @@ import io.fury.memory.MemoryUtils;
  */
 public class FurySerialization extends BaseFurySerialization {
   public static final byte FURY_SERIALIZATION_ID = 28;
-  private static final ThreadLocal<Tuple2<Fury, MemoryBuffer>> furyFactory = ThreadLocal.withInitial(() -> {
-    Fury fury = Fury.builder().requireClassRegistration(false).build();
-    MemoryBuffer buffer = MemoryUtils.buffer(32);
-    return Tuple2.of(fury, buffer);
-  });
-
-
+  private static final ThreadLocal<Tuple2<Fury, MemoryBuffer>> furyFactory =
+      ThreadLocal.withInitial(
+          () -> {
+            Fury fury = Fury.builder().requireClassRegistration(false).build();
+            MemoryBuffer buffer = MemoryUtils.buffer(32);
+            return Tuple2.of(fury, buffer);
+          });
 
   public byte getContentTypeId() {
     return FURY_SERIALIZATION_ID;
