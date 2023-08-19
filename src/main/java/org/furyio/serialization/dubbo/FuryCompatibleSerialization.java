@@ -13,13 +13,17 @@ import io.fury.serializer.CompatibleMode;
  */
 public class FuryCompatibleSerialization extends BaseFurySerialization {
   public static final byte FURY_SERIALIZATION_ID = 29;
-  private static final ThreadLocal<Tuple2<Fury, MemoryBuffer>> furyFactory = ThreadLocal.withInitial(() -> {
-    Fury fury = Fury.builder().requireClassRegistration(false)
-      .withCompatibleMode(CompatibleMode.COMPATIBLE).build();
-    MemoryBuffer buffer = MemoryUtils.buffer(32);
-    return Tuple2.of(fury, buffer);
-  });
-
+  private static final ThreadLocal<Tuple2<Fury, MemoryBuffer>> furyFactory =
+      ThreadLocal.withInitial(
+          () -> {
+            Fury fury =
+                Fury.builder()
+                    .requireClassRegistration(false)
+                    .withCompatibleMode(CompatibleMode.COMPATIBLE)
+                    .build();
+            MemoryBuffer buffer = MemoryUtils.buffer(32);
+            return Tuple2.of(fury, buffer);
+          });
 
   public byte getContentTypeId() {
     return FURY_SERIALIZATION_ID;
