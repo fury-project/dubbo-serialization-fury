@@ -1,6 +1,5 @@
 package org.furyio.serialization.dubbo;
 
-import com.google.common.base.Preconditions;
 import io.fury.Fury;
 import io.fury.collection.Tuple2;
 import io.fury.memory.MemoryBuffer;
@@ -27,17 +26,6 @@ public abstract class BaseFurySerialization implements Serialization {
 
   public ObjectInput deserialize(URL url, InputStream input) throws IOException {
     Tuple2<Fury, MemoryBuffer> tuple2 = getFury();
-    Fury fury = tuple2.f0;
-    MemoryBuffer buffer = tuple2.f1;
-    buffer.readerIndex(0);
-    int readOffset = input.read(buffer.getHeapMemory(), 0, 4);
-    Preconditions.checkArgument(readOffset == 4, readOffset);
-    int size = buffer.readInt();
-    int end = 4 + size;
-    buffer.ensure(end);
-    while (readOffset < end) {
-      readOffset += input.read(buffer.getHeapMemory(), readOffset, end - readOffset);
-    }
-    return new FuryObjectInput(fury, buffer);
+    return new FuryObjectInput(tuple2.f0, tuple2.f1, input);
   }
 }
