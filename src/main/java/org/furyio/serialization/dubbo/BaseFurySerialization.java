@@ -3,6 +3,7 @@ package org.furyio.serialization.dubbo;
 import io.fury.Fury;
 import io.fury.collection.Tuple2;
 import io.fury.memory.MemoryBuffer;
+import io.fury.util.LoaderBinding;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,11 +20,12 @@ import org.apache.dubbo.rpc.model.FrameworkModel;
  * @author chaokunyang
  */
 public abstract class BaseFurySerialization implements Serialization {
-  protected abstract Tuple2<Fury, MemoryBuffer> getFury();
+  protected abstract Tuple2<LoaderBinding, MemoryBuffer> getFury();
 
   public ObjectOutput serialize(URL url, OutputStream output) throws IOException {
-    Tuple2<Fury, MemoryBuffer> tuple2 = getFury();
-    Fury fury = tuple2.f0;
+    Tuple2<LoaderBinding, MemoryBuffer> tuple2 = getFury();
+    tuple2.f0.setClassLoader(Thread.currentThread().getContextClassLoader());
+    Fury fury = tuple2.f0.get();
     FuryCheckerListener checkerListener = getCheckerListener(url);
     fury.getClassResolver().setClassChecker(checkerListener.getChecker());
     fury.getClassResolver().setSerializerFactory(checkerListener);
@@ -31,8 +33,9 @@ public abstract class BaseFurySerialization implements Serialization {
   }
 
   public ObjectInput deserialize(URL url, InputStream input) throws IOException {
-    Tuple2<Fury, MemoryBuffer> tuple2 = getFury();
-    Fury fury = tuple2.f0;
+    Tuple2<LoaderBinding, MemoryBuffer> tuple2 = getFury();
+    tuple2.f0.setClassLoader(Thread.currentThread().getContextClassLoader());
+    Fury fury = tuple2.f0.get();
     FuryCheckerListener checkerListener = getCheckerListener(url);
     fury.getClassResolver().setClassChecker(checkerListener.getChecker());
     return new FuryObjectInput(fury, tuple2.f1, input);
