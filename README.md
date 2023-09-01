@@ -3,6 +3,15 @@
 ## How to use
 See https://github.com/chaokunyang/fury-dubbo-example for an end-to-end example.
 
+## Install
+```xml
+<dependency>
+  <groupId>org.furyio</groupId>
+  <artifactId>dubbo-serialization-fury</artifactId>
+  <version>0.1.1</version>
+</dependency>
+```
+
 ## How to configure to use fury serialization
 ### Server config:
 ```java
