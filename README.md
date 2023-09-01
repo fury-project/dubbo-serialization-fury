@@ -24,7 +24,7 @@ If type-forward/backward compatibility are needed, please replace `fury` by `fur
 ### Define Data
 See https://github.com/chaokunyang/fury-dubbo-example/blob/main/src/main/java/com/chaokunyang/fury/dubbo/data/Foo.java
 ```java
-public class Foo {
+public class Foo implements Serializable {
   private int f1;
   private List<Integer> list;
   private Map<String, Integer> map;
