@@ -5,6 +5,7 @@ import io.fury.collection.Tuple2;
 import io.fury.memory.MemoryBuffer;
 import io.fury.memory.MemoryUtils;
 import io.fury.serializer.CompatibleMode;
+import io.fury.util.LoaderBinding;
 
 /**
  * Fury serialization for dubbo. This integration support type forward/backward compatibility.
@@ -13,16 +14,19 @@ import io.fury.serializer.CompatibleMode;
  */
 public class FuryCompatibleSerialization extends BaseFurySerialization {
   public static final byte FURY_SERIALIZATION_ID = 29;
-  private static final ThreadLocal<Tuple2<Fury, MemoryBuffer>> furyFactory =
+  private static final ThreadLocal<Tuple2<LoaderBinding, MemoryBuffer>> furyFactory =
       ThreadLocal.withInitial(
           () -> {
-            Fury fury =
-                Fury.builder()
-                    .requireClassRegistration(false)
-                    .withCompatibleMode(CompatibleMode.COMPATIBLE)
-                    .build();
+            LoaderBinding binding =
+                new LoaderBinding(
+                    classLoader ->
+                        Fury.builder()
+                            .requireClassRegistration(false)
+                            .withCompatibleMode(CompatibleMode.COMPATIBLE)
+                            .withClassLoader(classLoader)
+                            .build());
             MemoryBuffer buffer = MemoryUtils.buffer(32);
-            return Tuple2.of(fury, buffer);
+            return Tuple2.of(binding, buffer);
           });
 
   public byte getContentTypeId() {
@@ -34,7 +38,7 @@ public class FuryCompatibleSerialization extends BaseFurySerialization {
   }
 
   @Override
-  protected Tuple2<Fury, MemoryBuffer> getFury() {
+  protected Tuple2<LoaderBinding, MemoryBuffer> getFury() {
     return furyFactory.get();
   }
 }
