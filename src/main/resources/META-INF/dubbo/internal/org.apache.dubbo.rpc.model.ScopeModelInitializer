@@ -1,0 +1,2 @@
+fury=org.furyio.serialization.dubbo.FuryScopeModelInitializer
+fury-compatible=org.furyio.serialization.dubbo.FuryScopeModelInitializer
