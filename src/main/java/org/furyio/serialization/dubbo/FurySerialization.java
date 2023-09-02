@@ -21,6 +21,7 @@ public class FurySerialization extends BaseFurySerialization {
                 new LoaderBinding(
                     classLoader ->
                         Fury.builder()
+                            .withRefTracking(true)
                             .requireClassRegistration(false)
                             .withClassLoader(classLoader)
                             .build());
