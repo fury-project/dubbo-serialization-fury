@@ -21,6 +21,7 @@ public class FuryCompatibleSerialization extends BaseFurySerialization {
                 new LoaderBinding(
                     classLoader ->
                         Fury.builder()
+                            .withRefTracking(true)
                             .requireClassRegistration(false)
                             .withCompatibleMode(CompatibleMode.COMPATIBLE)
                             .withClassLoader(classLoader)
