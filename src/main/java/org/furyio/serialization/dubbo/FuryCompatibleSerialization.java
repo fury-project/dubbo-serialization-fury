@@ -4,7 +4,7 @@ import io.fury.Fury;
 import io.fury.collection.Tuple2;
 import io.fury.memory.MemoryBuffer;
 import io.fury.memory.MemoryUtils;
-import io.fury.serializer.CompatibleMode;
+import io.fury.config.CompatibleMode;
 import io.fury.util.LoaderBinding;
 
 /**

@@ -8,7 +8,7 @@ See https://github.com/chaokunyang/fury-dubbo-example for an end-to-end example.
 <dependency>
   <groupId>org.furyio</groupId>
   <artifactId>dubbo-serialization-fury</artifactId>
-  <version>0.1.2</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
